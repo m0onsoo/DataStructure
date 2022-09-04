@@ -1,0 +1,76 @@
+typedef struct node{
+	char elem;
+	struct node *next;
+}node;
+
+typedef struct stack {
+	node *top;
+}stack;
+
+void initStack(stack *st) {
+	st->top = NULL;
+}
+
+node *getnode() {
+	node *p = (node *)malloc(sizeof(node));
+	p->next = NULL;
+
+	if (p == NULL)
+	{
+		printf("Not enough memory!");
+		return -1;
+	}
+
+	return p;
+}
+
+int putnode(node *p) {
+	int a = p->elem;
+	free(p);
+	return a;
+}
+
+int isEmpty(stack *st) {
+	if (st->top == NULL)
+		return 1;
+	return 0;
+}
+
+void emptyStackException() {
+	printf("Stack is Empty!\n");
+}
+
+void push(stack *st, char e) {
+	node *p = getnode();
+
+	p->elem = e;
+	p->next = st->top;
+	st->top = p;
+}
+char pop(stack *st) {
+	char top;
+	node *p;
+
+	if (isEmpty(st)) {
+		emptyStackException();
+		return -1;
+	}
+	else {
+		top = st->top->elem;
+		p = st->top;
+		st->top = st->top->next;
+		putnode(p);
+		return top;
+	}
+}
+char peek(stack *st) {
+	if (isEmpty(st))
+		emptyStackException();
+	else
+		printf("%c\n", st->top->elem);
+}
+void duplicate(stack *st) {
+	char e = pop(st->top);
+	push(st->top, e);
+	push(st->top, e);
+}

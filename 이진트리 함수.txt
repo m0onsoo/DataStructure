@@ -1,0 +1,58 @@
+typedef struct node {
+	int data;
+	struct node *left, *right;
+}node;
+
+node *getnode() {
+	node *p = (node *)malloc(sizeof(node));
+	p->left = NULL;
+	p->right = NULL;
+}
+
+node *leftChild(node *v) {
+	return v->left;
+}
+node *rightChild(node *v) {
+	return v->right;
+}
+
+void preOrder(node *v) {
+	
+	maketree(v); // visit v
+
+	if(leftChild(v) != NULL)
+		preOrder(leftChild(v));
+	if(rightChild(v) != NULL)
+		preOrder(rightChild(v));
+}
+void inOrder(node *v) {
+
+	if(leftChild(v) != NULL)
+		inOrder(leftChild(v));
+	printf("%d ", v->data); // visit v
+	if(rightChild(v) != NULL)
+		inOrder(rightChild(v));
+}
+void postOrder(node *v) {
+	if (leftChild(v) != NULL)
+		postOrder(v->left);
+	if (rightChild(v) != NULL)
+		postOrder(v->right);
+
+	printf("%d ", v->data); // visit v
+}
+
+void maketree(node *v) {
+	int x, y, z;
+
+	scanf("%d %d %d", &x, &y, &z);
+	v->data = x;
+	if (y != 0) {
+		v->left = getnode();
+		v->left->data = y;
+	}
+	if (z != 0) {
+		v->right = getnode();
+		v->right->data = z;
+	}
+}

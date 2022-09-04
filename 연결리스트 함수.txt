@@ -1,0 +1,102 @@
+typedef struct node {
+	char elem;
+	int n;
+	struct node *prev, *next;
+}node;
+
+node *getnode() {
+	node *p = (node *)malloc(sizeof(node));
+	p->prev = p->next = NULL;
+
+	if (p == NULL) {
+		printf("Not enough memory!");
+		return -1;
+	}
+
+	return p;
+}
+
+char putnode(node *p) {
+	int a = p->elem;
+	free(p);
+	return a;
+}
+
+void initList(node *header, node *trailer) {
+	header->next = trailer;
+	trailer->prev = header;
+	header->n = 0;
+}
+
+void invalid() {
+	printf("invalid position\n");
+}
+
+void addNodeBefore(node *p, char e) {
+	node *newnode = getnode();
+
+	newnode->elem = e;
+	newnode->prev = p->prev;
+	newnode->next = p;
+	p->prev->next = newnode;
+	p->prev = newnode;
+}
+
+void add(node *header, int r, int e){
+	int i;
+	node *p = header;
+
+	if (r < 1 || r > h->n + 1) {
+		invalid();
+	}
+	else {
+		for (i = 0; i < r; i++)
+			p = p->next;
+
+		addNodeBefore(p, e);
+		header->n++;
+	}
+}
+
+void delete(node *header, int r) {
+	int i;
+	node *p = header;
+
+	if (r < 1 || r > header->n)
+		invalid();
+
+	else {
+		for (i = 0; i < r; i++)
+			p = p->next;
+
+		p->prev->next = p->next;
+		p->next->prev = p->prev;
+		header->n -= 1;
+		putnode(p);
+	}
+}
+
+int get(node *header, int r) {
+	int i;
+	node *p = header;
+
+	if (r < 1 || r > header->n) {
+		invalid();
+		return NULL;
+	}
+	else {
+		for (i = 0; i < r; i++)
+			p = p->next;
+		return p->elem;
+	}
+}
+
+void print(node *header, node *trailer) {
+	node *p = header->next;
+
+	while (p != trailer) {
+		printf("%c", p->elem);
+		p = p->next;
+	}
+	printf("\n");
+}

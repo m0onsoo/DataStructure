@@ -1,0 +1,118 @@
+typedef struct node{
+	int elem;
+	struct node *next, *prev;
+}node;
+typedef struct deque {
+	node *front, *rear;
+}deque;
+node *getnode() {
+	node *p = (node *)malloc(sizeof(node));
+	p->next = NULL;
+
+	if (p == NULL)
+	{
+		printf("Not enough memory!");
+		return -1;
+	}
+
+	return p;
+}
+int putnode(node *p) {
+	int a = p->elem;
+	free(p);
+	return a;
+}
+int isEmpty(deque *deq) {
+	return deq->front == NULL;
+}
+void initDeque(deque *deq) {
+	deq->front = deq->rear = NULL;
+}
+void emptyDequeException() {
+	printf("underflow\n");
+}
+void push(deque *deq, int e) {
+	node *p = getnode();
+	p->elem = e;
+
+	if (isEmpty(deq)) {
+		deq->front = deq->rear = p;
+		deq->front->prev = deq->rear->next = NULL;
+	}
+	else{
+		p->next = deq->front;
+		p->prev = NULL;
+
+		deq->front->prev = p;
+		deq->front = p;
+	}
+}
+int pop(deque *deq) {
+	node *p = deq->front;
+	int elem = p->elem;
+
+	if (isEmpty(deq)) {
+		emptyDequeException();
+		return -1;
+	}
+	else {
+		deq->front = deq->front->next;
+
+		if (deq->front == NULL)
+			deq->rear = NULL;
+		else
+			deq->front->prev = NULL;
+
+		putnode(p);
+	}
+
+	if (deq->front == NULL)
+		deq->rear = NULL;
+
+	return elem;
+}
+void inject(deque *deq, int e) {
+	node *p = getnode();
+	p->elem = e;
+
+	if (isEmpty(deq)) {
+		deq->front = deq->rear = p;
+		deq->front->prev = deq->rear->next = NULL;
+	}
+	else {
+		p->prev = deq->rear;
+		p->next = NULL;
+
+		deq->rear->next = p;
+		deq->rear = p;
+	}
+}
+char eject(deque *deq) {
+	node *p = deq->rear;
+	int elem;
+
+	if (isEmpty(deq)) {
+		emptyDequeException();
+		return -1;
+	}
+	else {
+		deq->rear = deq->rear->prev;
+
+		if (deq->rear == NULL)
+			deq->front = NULL;
+		else
+			deq->rear->next = NULL;
+		elem = p->elem;
+		putnode(p);
+	}
+
+	return elem;
+}
+void print(deque *deq) {
+	node *p = deq->front;
+	while (p != NULL) {
+		printf(" %d", p->elem);
+		p = p->next;
+	}
+	printf("\n");
+}

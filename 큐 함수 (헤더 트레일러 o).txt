@@ -1,0 +1,64 @@
+typedef struct que_node {
+	int elem;
+	struct que_node *next, *prev;
+}que_node;
+typedef struct queue {
+	que_node *header, *trailer;
+}queue;
+que_node *getnode() {
+	que_node *p = (que_node *)malloc(sizeof(que_node));
+	p->next = NULL;
+
+	if (p == NULL)
+	{
+		printf("Not enough memory!");
+		return -1;
+	}
+
+	return p;
+}
+int putnode(que_node *p) {
+	int a = p->elem;
+	free(p);
+	return a;
+}
+int isEmpty(queue *que) {
+	return que->header->next == que->trailer;
+}
+void EmptyQueueException() {
+	printf("Queue is Empty!");
+	return -1;
+}
+void initQueue(queue *que) {
+	que->header = getnode();
+	que->trailer = getnode();
+	que->header->next = que->trailer;
+	que->trailer->prev = que->header;
+	que->header->prev = que->trailer->next = NULL;
+	que->header->elem = que->trailer->elem = NULL;
+}
+void enqueue(queue *que, int e) {
+	que_node *p = getnode();
+	p->elem = e;
+
+	que->trailer->prev->next = p;
+	p->prev = que->trailer->prev;
+	p->next = que->trailer;
+	que->trailer->prev = p;
+}
+int dequeue(queue *que) {
+	int elem;
+	que_node *p = que->header->next;
+
+	if (isEmpty(que)) {
+		EmptyQueueException();
+	}
+	else {
+		elem = p->elem;
+		que->header->next = que->header->next->next;
+		que->header->next->prev = que->header;
+		putnode(p);
+
+		return elem;
+	}
+}
